@@ -1,0 +1,86 @@
+class Node :
+    def __init__(self,data):
+        self.data =data
+        self.child = []
+        self.parent = None
+
+    def get_level(self):
+        level = 0
+        p = self.parent
+        while p:
+            level += 1
+            p = p.parent
+
+        return level
+
+    def print_tree(self):
+        spaces = ' ' * self.get_level() * 3
+        prefix = spaces + "|__" if self.parent else ""
+        print(prefix + self.data)
+        if self.child:
+            for c in self.child:
+                c.print_tree()
+
+    def add_child(self,obj):
+        obj.parent = self
+        self.child.append(obj)
+
+s = Node("control centre")
+s1 = Node("western sector")
+s2 = Node("eastern sector")
+s3 = Node("northern sector")
+s4 = Node("southern sector")
+s.add_child(s1)
+s.add_child(s2)
+s.add_child(s3)
+s.add_child(s4)
+states = []
+cities = []
+def cc(s):  
+    
+
+    
+    n = input("Provide the name of the unit needs to be added - ")
+    n1 = input("Provide the name of the city in which this unit needs to be added - ")
+    n1 = n1.lower()
+    k1 = Node(n)
+    if n1 in cities :
+        for i in s.child:
+            for j in i.child:
+                for k in j.child:
+                    if str(k.data) == n1:
+                        print(n1)
+                        k.add_child(k1)
+    else:
+        n2 = input("City is not available , Please provide the name of the state in which this city needs to be added - ")
+        n2 = n2.lower()
+        n11 = Node(n1)
+        cities.append(n1)
+        #print(cities)
+
+        if n2 in states:
+            for i in s.child:
+                for j in i.child:
+                    if str(j.data) == n2:
+                        j.add_child(n11)
+                        n11.add_child(k1)
+        
+        else:
+            states.append(n2)
+            n3 = input("State is also not available , Please provide the name of the sector in which this state needs to be added - ")
+            n3 = n3.lower()
+            n11 = Node(n1)
+            n22 = Node(n2)
+
+            for i in s.child:
+                if str(i.data)==n3:
+                    i.add_child(n22)
+                    n22.add_child(n11)
+                    n11.add_child(k1)
+
+    s.print_tree()
+    r = int(input("if you want to continue , press 1 , else press any other key - "))
+    if r == 1:
+        cc(s)
+
+cc(s)
